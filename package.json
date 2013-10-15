@@ -33,7 +33,8 @@
     "icon": "icon.png",
     "config": {
       "controller": "HerokuController"
-    }
+    },
+    "userConfig": true
   },
   "dependencies": {
     "ssh-keypair": "~1.0.0",

@@ -53,9 +53,7 @@ module.exports = {
 
   globalRoutes: function (app, context) {
     app.get('/oauth', context.auth.requireUser, function (req, res, next) {
-      if (req.query.redirect) {
-        req.session.heroku_auth_redirect = req.query.redirect
-      }
+      req.session.heroku_auth_redirect = req.query.redirect || '/account#heroku'
       next()
     }, context.passport.authenticate('heroku'));
     app.get(
@@ -93,6 +91,11 @@ module.exports = {
 function validateAuth(req, token, refresh, profile, done) {
   var heroku = req.user.jobplugins.heroku = req.user.jobplugins.heroku || {}
   if (!heroku.accounts) heroku.accounts = []
+  for (var i=0; i<heroku.accounts.length; i++) {
+    if (heroku.accounts[i].id === profile.id) {
+      return done(null, req.user)
+    }
+  }
   api.getApps(profile.id, token, function (err, apps) {
     if (err) return done(new Error('failed to retrieve apps list: ' + err.message))
     keypair(profile.email + ' - strider', function (err, priv, pub) {
