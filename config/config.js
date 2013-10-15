@@ -26,31 +26,5 @@ app.controller('HerokuController', ['$scope', '$element', function ($scope, $ele
       }
     });
   };
-  $scope.newKeys = function () {
-    if (!$scope.config.app) return console.warn('Tried to newKeys but no app');
-    $.ajax('/' + $scope.project.name + '/ext/heroku/keygen', {
-      type: 'POST',
-      success: function (body) {
-        $scope.config.privkey = body.privkey;
-        $scope.config.pubkey = body.pubkey;
-        $scope.success('Generated new keys and pushed them to heroku. You are ready to deploy!', true);
-      },
-      error: function () {
-        $scope.error('Error generating new keys', true);
-      }
-    });
-  };
-  $scope.keysToHeroku = function () {
-    if (!$scope.config.app) return console.error('tried to push keys to heroku, but no app');
-    $.ajax('/' + $scope.project.name + '/ext/heroku/pushkeys', {
-      type: 'POST',
-      success: function () {
-        $scope.success('Keys pushed to heroku. You are ready to deploy!', true);
-      },
-      error: function () {
-        $scope.error('Failed to push keys to heroku', true);
-      }
-    });
-  };
 }]);
 

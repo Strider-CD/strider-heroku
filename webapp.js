@@ -3,8 +3,6 @@ var api = require('./lib/api')
   , HerokuStrategy = require('passport-heroku').Strategy
   , keypair = require('ssh-keypair')
 
-var API = 'https://heroku.com/...'
-
 module.exports = {
   appConfig: {
     clientId: 'da7ad270-b5e6-4bdb-8bbc-a6cad9939394',
@@ -15,6 +13,8 @@ module.exports = {
       id: String,
       token: String,
       email: String,
+      privkey: String,
+      pubkey: String,
       // list of the apps
       cache: [{
         id: String,
@@ -34,9 +34,7 @@ module.exports = {
       git_url: String,
       web_url: String,
       updated_at: String
-    },
-    privkey: String,
-    pubkey: String
+    }
   },
 
   auth: function (passport, context) {
@@ -47,7 +45,7 @@ module.exports = {
     passport.use(new HerokuStrategy({
       client_id: config.clientId,
       client_secret: config.clientSecret,
-      passReqToCallback: true
+      passReqToCallback: true,
       callbackURL: context.config.server_name + '/ext/heroku/oauth/callback'
     }, validateAuth))
   },
@@ -88,24 +86,6 @@ module.exports = {
         })
       })
     })
-  },
-
-  routes: function (app, context) {
-    app.post('/keygen', function (req, res) {
-      var config = req.pluginConfig()
-      keypair(config.app + ' - strider', function (err, priv, pub) {
-        if (err) return res.send(500, 'Failed to generate keypair; ' + err.message)
-        config.privkey = priv
-        config.pubkey = pub
-        req.pluginConfig(config, function (err) {
-          if (err) return res.send(500, 'Failed to save plugin config: ' + err.message)
-          res.send({
-            privkey: priv,
-            pubkey: pub
-          })
-        })
-      })
-    })
   }
 }
 
@@ -114,15 +94,23 @@ function validateAuth(req, token, refresh, profile, done) {
   if (!heroku.accounts) heroku.accounts = []
   api.getApps(token, function (err, apps) {
     if (err) return done(new Error('failed to retrieve apps list: ' + err.message))
-    heroku.accounts.push({
-      id: profile.id,
-      token: token,
-      email: profile.email,
-      cache: [apps]
-    })
-    req.user.markModified('jobplugins')
-    req.user.save(function (err) {
-      done(err, req.user)
+    keypair(profile.email + ' - strider', function (err, priv, pub) {
+      if (err) return done(new Error('Failed to generate keypair; ' + err.message))
+      api.addKey(token, pub, function (err) {
+        if (err) return done(new Error('Failed to add ssh key: ' + err.message))
+        heroku.accounts.push({
+          id: profile.id,
+          token: token,
+          email: profile.email,
+          privkey: priv,
+          pubkey: pub,
+          cache: [apps]
+        })
+        req.user.markModified('jobplugins')
+        req.user.save(function (err) {
+          done(err, req.user)
+        })
+      })
     })
   })
 }

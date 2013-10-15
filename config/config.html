@@ -2,37 +2,17 @@
 <div ng-show="userIsCreator">
   <a href="/ext/heroku/oauth?redirect=/[[ project.name ]]/config" class="btn btn-success">Add a Heroku Account</a>
   <div ng-show="accounts.length">
+    Linked Accounts:
     <select ng-model="account" ng-options="account.email for account in userConfig.accounts"></select>
     <div>
+      <label>Apps</label>
       <select ng-model="config.app" ng-options="app.name for app in account.cache"></select>
       <button ng-click="getApps()" class="btn"><i class="icon-refresh"></i> Refresh Apps List</button>
     </div>
   </div>
+  <button ng-click="save()" class="btn btn-primary">Save</button>
 </div>
 <p ng-hide="userIsCreator">
   Only the creator can setup this project for heroku
   deployment.
 </p>
-<!--div ng-switch="!!config.app">
-  <div ng-switch-when="false">
-  </div>
-  <div ng-switch-default>
-    <p ng-hide="userIsCreator">
-      Only the creator can change the target app.
-      <input disabled value="[[ config.app.name ]]">
-    </p>
-    <div class="well row-fluid">
-      <h3>SSH Keys</h3>
-      <div class="span6">
-        <h4>Private Key</h4>
-        <textarea ng-model="config.privkey"></textarea>
-      </div>
-      <div class="span6">
-        <h4>Public Key</h4>
-        <textarea ng-model="config.pubkey"></textarea>
-      </div>
-      <button class="btn" ng-click="newKeys()">Generate New Keys</button>
-      <button class="btn" ng-click="keysToHeroku()">Register Keys to Heroku</button>
-  </div>
-</div-->
-<button ng-click="save()" class="btn btn-primary">Save</button>
