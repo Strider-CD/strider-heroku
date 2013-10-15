@@ -1,0 +1,43 @@
+{
+  "name": "strider-heroku",
+  "version": "0.0.0",
+  "description": "Heroku deployment for Strider",
+  "main": "webapp.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "make test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Strider-CD/strider-heroku.git"
+  },
+  "keywords": [
+    "strider",
+    "heroku",
+    "deploy",
+    "oauth",
+    "cd"
+  ],
+  "author": "Jared Forsyth <jared@jaredforsyth.com>",
+  "license": "MIT",
+  "gitHead": "0c7459f2fa57385c0b6bc71e98ef01be99fad226",
+  "readmeFilename": "Readme.md",
+  "strider": {
+    "id": "heroku",
+    "type": "job",
+    "title": "Heroku",
+    "webapp": "webapp.js",
+    "worker": "worker.js",
+    "icon": "icon.png",
+    "config": {
+      "controller": "HerokuController"
+    }
+  },
+  "dependencies": {
+    "ssh-keypair": "~1.0.0",
+    "superagent": "~0.15.5",
+    "passport-heroku": "0.0.2"
+  }
+}

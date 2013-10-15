@@ -43,9 +43,10 @@ module.exports = {
       throw new Error('Heroku plugin misconfigured. client_id and client_secret required')
     }
     passport.use(new HerokuStrategy({
-      client_id: config.clientId,
-      client_secret: config.clientSecret,
+      clientID: config.clientId,
+      clientSecret: config.clientSecret,
       passReqToCallback: true,
+      scope: ['global'],
       callbackURL: context.config.server_name + '/ext/heroku/oauth/callback'
     }, validateAuth))
   },
@@ -53,7 +54,7 @@ module.exports = {
   globalRoutes: function (app, context) {
     app.get('/oauth', context.auth.requireUser, function (req, res, next) {
       if (req.query.redirect) {
-        req.session.set('heroku_auth_redirect', req.query.redirect)
+        req.session.heroku_auth_redirect = req.query.redirect
       }
       next()
     }, context.passport.authenticate('heroku'));
@@ -62,7 +63,7 @@ module.exports = {
       context.passport.authenticate('heroku', { failureRedirect: '/account#heroku' }),
       function(req, res) {
         // Successful authentication, redirect home.
-        res.redirect(req.session.get('heroku_auth_redirect') || '/account#heroku');
+        res.redirect(req.session.heroku_auth_redirect || '/account#heroku');
       });
 
     app.get('/apps/:id', function (req, res) {
@@ -76,7 +77,7 @@ module.exports = {
         }
       }
       if (!account) return res.send(404, 'Account not found')
-      api.getApps(account.token, function (err, apps) {
+      api.getApps(account.id, account.token, function (err, apps) {
         if (err) return res.send(500, 'failed to get apps from api: ' + err.message)
         account.cache = apps
         req.user.markModified('jobplugins')
@@ -92,7 +93,7 @@ module.exports = {
 function validateAuth(req, token, refresh, profile, done) {
   var heroku = req.user.jobplugins.heroku = req.user.jobplugins.heroku || {}
   if (!heroku.accounts) heroku.accounts = []
-  api.getApps(token, function (err, apps) {
+  api.getApps(profile.id, token, function (err, apps) {
     if (err) return done(new Error('failed to retrieve apps list: ' + err.message))
     keypair(profile.email + ' - strider', function (err, priv, pub) {
       if (err) return done(new Error('Failed to generate keypair; ' + err.message))
