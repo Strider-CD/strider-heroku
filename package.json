@@ -34,7 +34,9 @@
     "config": {
       "controller": "HerokuController"
     },
-    "userConfig": true
+    "userConfig": {
+      "controller": "HerokuController"
+    }
   },
   "dependencies": {
     "ssh-keypair": "~1.0.0",

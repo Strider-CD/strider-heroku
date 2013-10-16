@@ -12,6 +12,7 @@ module.exports = {
     accounts: [{
       id: String,
       token: String,
+      api_key: String, // backwards compat
       email: String,
       privkey: String,
       pubkey: String,
@@ -82,6 +83,37 @@ module.exports = {
         req.user.save(function (err) {
           if (err) return res.send(500, 'Failed to save user')
           res.send(apps)
+        })
+      })
+    })
+
+    app.del('/account/:id', function (req, res) {
+      var config = req.user.jobplugins.heroku
+      if (!config || !config.accounts) return res.send(404, 'Account not found')
+      var account;
+      for (var i=0; i<config.accounts.length; i++) {
+        if (config.accounts[i].id === req.params.id) {
+          account = config.accounts[i]
+          break;
+        }
+      }
+      if (!account) return res.send(404, 'Account not found')
+      context.models.Project.update({
+        'branches.plugins': {
+          $elemMatch: {
+            id: 'heroku',
+            'config.app.account': account.id
+          }
+        }
+      }, {
+        $pull:{'branches.$.plugins': {id: 'heroku'}}
+      }, function (err) {
+        if (err) return res.send(500, 'Failed to update projects')
+        config.accounts.splice(i, 1);
+        req.user.markModified('jobplugins');
+        req.user.save(function (err) {
+          if (err) return res.send(500, 'Failed to save user')
+          res.send(204)
         })
       })
     })
