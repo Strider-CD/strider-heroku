@@ -121,10 +121,7 @@ module.exports = {
 }
 
 function validateAuth(req, token, refresh, profile, done) {
-  if (!req.user.jobplugins) {
-    req.user.jobplugins = {}
-  }
-  var heroku = req.user.jobplugins.heroku = req.user.jobplugins.heroku || {}
+  var heroku = req.user.jobPluginData('heroku') || {}
   if (!heroku.accounts) heroku.accounts = []
   for (var i=0; i<heroku.accounts.length; i++) {
     if (heroku.accounts[i].id === profile.id) {
@@ -145,8 +142,7 @@ function validateAuth(req, token, refresh, profile, done) {
           pubkey: pub,
           cache: [apps]
         })
-        req.user.markModified('jobplugins')
-        req.user.save(function (err) {
+        req.user.jobPluginData('heroku', heroku, function (err) {
           done(err, req.user)
         })
       })
