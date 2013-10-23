@@ -121,6 +121,9 @@ module.exports = {
 }
 
 function validateAuth(req, token, refresh, profile, done) {
+  if (!req.user.jobplugins) {
+    req.user.jobplugins = {}
+  }
   var heroku = req.user.jobplugins.heroku = req.user.jobplugins.heroku || {}
   if (!heroku.accounts) heroku.accounts = []
   for (var i=0; i<heroku.accounts.length; i++) {
