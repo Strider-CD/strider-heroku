@@ -3,7 +3,7 @@ app.controller('HerokuController', ['$scope', '$element', function ($scope, $ele
   $scope.$watch('userConfigs.heroku', function (value) {
     if (!value) return
     $scope.userConfig = value;
-    if (!$scope.account && value.accounts.length > 0) {
+    if (!$scope.account && value.accounts && value.accounts.length > 0) {
       $scope.account = value.accounts[0];
     }
   });
