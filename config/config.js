@@ -1,11 +1,10 @@
 
 app.controller('HerokuController', ['$scope', '$element', function ($scope, $element) {
   $scope.$watch('userConfigs.heroku', function (value) {
-    if (value !== undefined) {
-      $scope.userConfig = value;
-      if (!$scope.account && value.accounts.length > 0) {
-        $scope.account = value.accounts[0];
-      }
+    if (!value) return
+    $scope.userConfig = value;
+    if (!$scope.account && value.accounts.length > 0) {
+      $scope.account = value.accounts[0];
     }
   });
   $scope.$watch('configs[branch.name].heroku.config', function (value) {
