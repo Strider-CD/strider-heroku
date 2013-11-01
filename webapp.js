@@ -66,7 +66,7 @@ module.exports = {
       });
 
     app.get('/apps/:id', function (req, res) {
-      var config = req.user.jobplugins.heroku
+      var config = req.user.jobPluginData('heroku') || {}
       if (!config || !config.accounts) return res.send(404, 'Account not found')
       var account;
       for (var i=0; i<config.accounts.length; i++) {
@@ -88,7 +88,7 @@ module.exports = {
     })
 
     app.del('/account/:id', function (req, res) {
-      var config = req.user.jobplugins.heroku
+      var config = req.user.jobPluginData('heroku') || {}
       if (!config || !config.accounts) return res.send(404, 'Account not found')
       var account;
       for (var i=0; i<config.accounts.length; i++) {
