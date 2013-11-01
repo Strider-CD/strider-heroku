@@ -10,7 +10,6 @@ module.exports = {
         break;
       }
     }
-    console.log(account)
     if (!account) return cb(new Error('Heroku invalid configuration. Account not found'))
     cb(null, {
       deploy: function (context, done) {
