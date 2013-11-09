@@ -4,8 +4,8 @@ var git = require('strider-git/lib')
 module.exports = {
   init: function (userConfig, config, job, context, cb) {
     var account
-      , err = new Error('Heroku invalid configuration. Account not found')
-    if (!userConfig) return cb(err)
+      , err = new Error('Invalid heroku configuration. Account not found')
+    if (!userConfig || !config || !config.app || !config.app.account) return cb(err)
     for (var i=0; i<userConfig.accounts.length; i++) {
       if (userConfig.accounts[i].id === config.app.account) {
         account = userConfig.accounts[i]
