@@ -43,8 +43,8 @@ function make_basic_auth_header(api_key) {
  * <body> defaults to empty, is useful when coupled with POST method.
  */
 function api_call(path, api_key, callback, params, method, headers, body) {
-  var method = method || "GET";
-  var headers = headers || {};
+  method = method || "GET";
+  headers = headers || {};
 
   var url = HEROKU_API_ENDPOINT + path;
 
@@ -61,15 +61,14 @@ function api_call(path, api_key, callback, params, method, headers, body) {
     , headers: headers
   };
 
-  if (body !== undefined
-    && (method.toUpperCase() === "POST" || method.toUpperCase() === "PUT")) {
+  if (body !== undefined && (method.toUpperCase() === "POST" || method.toUpperCase() === "PUT")) {
     opts.body = body;
   }
 
   console.debug("Heroku API request: %j", opts);
   request(opts, callback);
 
-};
+}
 
 
 /*
@@ -84,7 +83,7 @@ function api_call(path, api_key, callback, params, method, headers, body) {
 function add_ssh_key(api_key, pubkey, callback) {
   api_call("/user/keys", api_key, callback, {}, "POST",
     {"Content-Type":"text/ssh-authkey"}, pubkey);
-};
+}
 
 /*
  * list_ssh_keys()
@@ -171,7 +170,7 @@ function setup_account_integration(user_obj, api_key, callback) {
         fs.unlink(keyname + ".pub", this.parallel());
       } catch(e) {
         // do nothing
-      };
+      }
       console.debug("Heroku SSH keypair deleted from local FS");
       callback(err, user_obj, this.user_host_field);
     }
