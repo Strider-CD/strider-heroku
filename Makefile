@@ -7,6 +7,6 @@ test-only:
 tolint := *.js *.json lib
 
 lint:
-	@jshint --verbose $(tolint)
+	@./node_modules/.bin/jshint --verbose $(tolint)
 
 .PHONY: test lint

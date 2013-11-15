@@ -44,5 +44,8 @@
     "superagent": "~0.15.5",
     "passport-heroku": "0.0.2",
     "step": "0.0.5"
+  },
+  "devDependencies": {
+    "jshint": "~2.3.0"
   }
 }
