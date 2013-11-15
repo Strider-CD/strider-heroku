@@ -46,6 +46,7 @@
     "step": "0.0.5"
   },
   "devDependencies": {
-    "jshint": "~2.3.0"
+    "jshint": "~2.3.0",
+    "mocha": "~1.14.0"
   }
 }
