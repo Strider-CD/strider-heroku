@@ -1,6 +1,6 @@
 {
   "name": "strider-heroku",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Heroku deployment for Strider",
   "main": "webapp.js",
   "directories": {
@@ -40,7 +40,7 @@
   },
   "dependencies": {
     "ssh-keypair": "~1.0.0",
-    "strider-git": "git+https://github.com/Strider-CD/strider-git.git",
+    "strider-git": "~0.1.0",
     "superagent": "~0.15.5",
     "passport-heroku": "0.0.2",
     "step": "0.0.5"
