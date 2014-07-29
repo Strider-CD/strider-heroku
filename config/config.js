@@ -9,7 +9,7 @@ app.controller('HerokuController', ['$scope', '$element', function ($scope, $ele
   });
   $scope.$watch('configs[branch.name].heroku.config', function (value) {
     $scope.config = value;
-    if (value.app && $scope.userConfig.accounts) {
+    if (value && value.app && $scope.userConfig.accounts) {
       for (var i=0; i<$scope.userConfig.accounts.length; i++) {
         if ($scope.userConfig.accounts[i].id === value.app.account) {
           $scope.account = $scope.userConfig.accounts[i];
