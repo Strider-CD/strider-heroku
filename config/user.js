@@ -1,5 +1,5 @@
 
-app.controller('HerokuController', ['$scope', '$element', function ($scope, $element) {
+app.controller('HerokuUserController', ['$scope', '$element', function ($scope, $element) {
   $scope.$watch('user.jobplugins.heroku', function (value) {
     $scope.config = value;
   });
