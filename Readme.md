@@ -12,3 +12,8 @@ To use on **anything other than localhost:3000**, you need to register your own 
 This is a screenshot of what you will see on your dashboard:
 
 ![screenshot](docs/heroku_api_key.png)
+
+# Configuring Strider to use your Heroku API Client
+Once you have your `HEROKU_OAUTH_ID` and `HEROKU_OAUTH_SECRET`, you must configure Strider to use them like this:
+
+`heroku config:add PLUGIN_HEROKU_CLIENT_ID=<CLIENT_ID_FROM_HEROKU> PLUGIN_HEROKU_CLIENT_SECRET=<CLIENT_SECRET_FROM_HEROKU>`
