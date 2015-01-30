@@ -1,16 +1,23 @@
+'use strict';
 
 app.controller('HerokuController', ['$scope', '$element', function ($scope, $element) {
+  $scope.saving = false;
+
   $scope.$watch('userConfigs.heroku', function (value) {
-    if (!value) return
+    if (!value) return;
+
     $scope.userConfig = value;
+
     if (!$scope.account && value.accounts && value.accounts.length > 0) {
       $scope.account = value.accounts[0];
     }
   });
+
   $scope.$watch('configs[branch.name].heroku.config', function (value) {
     $scope.config = value;
+
     if (value && value.app && $scope.userConfig.accounts) {
-      for (var i=0; i<$scope.userConfig.accounts.length; i++) {
+      for (var i = 0; i < $scope.userConfig.accounts.length; i++) {
         if ($scope.userConfig.accounts[i].id === value.app.account) {
           $scope.account = $scope.userConfig.accounts[i];
           break;
@@ -18,15 +25,20 @@ app.controller('HerokuController', ['$scope', '$element', function ($scope, $ele
       }
     }
   });
-  $scope.saving = false;
+
   $scope.save = function () {
     $scope.saving = true;
+
     $scope.pluginConfig('heroku', $scope.config, function () {
       $scope.saving = false;
     });
   };
+
   $scope.getApps = function () {
-    if (!$scope.account) return console.warn('tried to getApps but no account');
+    if (!$scope.account) {
+      return console.warn('tried to getApps but no account');
+    }
+
     $.ajax('/ext/heroku/apps/' + $scope.account.id, {
       type: 'GET',
       success: function (body, req) {
@@ -39,4 +51,3 @@ app.controller('HerokuController', ['$scope', '$element', function ($scope, $ele
     });
   };
 }]);
-

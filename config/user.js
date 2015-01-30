@@ -1,8 +1,10 @@
+'use strict';
 
 app.controller('HerokuUserController', ['$scope', '$element', function ($scope, $element) {
   $scope.$watch('user.jobplugins.heroku', function (value) {
     $scope.config = value;
   });
+
   $scope.remove = function (account) {
     $.ajax('/ext/heroku/account/' + account.id, {
       type: 'DELETE',
