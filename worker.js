@@ -16,7 +16,12 @@ module.exports = {
     cb(null, {
       deploy: function (context, done) {
         var cmd = 'git push -f ' + config.app.git_url + ' ' + context.branch + ':master'
-        git.gitaneCmd(cmd, context.dataDir, account.privkey, context, done)
+         , auth = {
+            type: /^http/.test(config.app.git_url) ? 'http': 'ssh'
+            , privKey: account.privKey
+          }
+        git.gitCmd(cmd, context.dataDir, auth, context, done)
+
       }
     })
   }
