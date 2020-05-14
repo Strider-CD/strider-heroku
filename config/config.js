@@ -1,53 +1,61 @@
 'use strict';
+/* eslint-disable no-undef */
 
-app.controller('HerokuController', ['$scope', '$element', function ($scope, $element) {
-  $scope.saving = false;
+app.controller('HerokuController', [
+  '$scope',
+  '$element',
+  function ($scope) {
+    $scope.saving = false;
 
-  $scope.$watch('userConfigs.heroku', function (value) {
-    if (!value) return;
+    $scope.$watch('userConfigs.heroku', function (value) {
+      if (!value) return;
 
-    $scope.userConfig = value;
+      $scope.userConfig = value;
 
-    if (!$scope.account && value.accounts && value.accounts.length > 0) {
-      $scope.account = value.accounts[0];
-    }
-  });
+      if (!$scope.account && value.accounts && value.accounts.length > 0) {
+        $scope.account = value.accounts[0];
+      }
+    });
 
-  $scope.$watch('configs[branch.name].heroku.config', function (value) {
-    $scope.config = value;
+    $scope.$watch('configs[branch.name].heroku.config', function (value) {
+      $scope.config = value;
 
-    if (value && value.app && $scope.userConfig.accounts) {
-      for (var i = 0; i < $scope.userConfig.accounts.length; i++) {
-        if ($scope.userConfig.accounts[i].id === value.app.account) {
-          $scope.account = $scope.userConfig.accounts[i];
-          break;
+      if (value && value.app && $scope.userConfig.accounts) {
+        for (var i = 0; i < $scope.userConfig.accounts.length; i++) {
+          if ($scope.userConfig.accounts[i].id === value.app.account) {
+            $scope.account = $scope.userConfig.accounts[i];
+            break;
+          }
         }
       }
-    }
-  });
-
-  $scope.save = function () {
-    $scope.saving = true;
-
-    $scope.pluginConfig('heroku', $scope.config, function () {
-      $scope.saving = false;
     });
-  };
 
-  $scope.getApps = function () {
-    if (!$scope.account) {
-      return console.warn('tried to getApps but no account');
-    }
+    $scope.save = function () {
+      $scope.saving = true;
 
-    $.ajax('/ext/heroku/apps/' + $scope.account.id, {
-      type: 'GET',
-      success: function (body, req) {
-        $scope.account.cache = body;
-        $scope.success('Got accounts list for ' + $scope.account.email, true);
-      },
-      error: function () {
-        $scope.error('Failed to get accounts list for ' + $scope.account.email, true);
+      $scope.pluginConfig('heroku', $scope.config, function () {
+        $scope.saving = false;
+      });
+    };
+
+    $scope.getApps = function () {
+      if (!$scope.account) {
+        return console.warn('tried to getApps but no account');
       }
-    });
-  };
-}]);
+
+      $.ajax('/ext/heroku/apps/' + $scope.account.id, {
+        type: 'GET',
+        success: function (body) {
+          $scope.account.cache = body;
+          $scope.success('Got accounts list for ' + $scope.account.email, true);
+        },
+        error: function () {
+          $scope.error(
+            'Failed to get accounts list for ' + $scope.account.email,
+            true
+          );
+        },
+      });
+    };
+  },
+]);
