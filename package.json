@@ -8,7 +8,8 @@
   },
   "scripts": {
     "test": "npm run lint",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "release": "standard-version"
   },
   "repository": {
     "type": "git",
@@ -45,6 +46,7 @@
     "superagent": "^5.2.2"
   },
   "devDependencies": {
-    "eslint": "^7.0.0"
+    "eslint": "^7.0.0",
+    "standard-version": "^8.0.0"
   }
 }
