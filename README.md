@@ -14,11 +14,21 @@ This is a screenshot of what you will see on your dashboard:
 
 # Configuring Strider to use your Heroku API Client
 
-Add an API client for the url pattern: `https://yourhostnameofstrider/auth/heroku/callback`
+If running locally we recommend using ngrok: `ngrok http 3000` and using the provided url as your host in Heroku and for `SERVER_NAME` env on Strider.
+
+Add an API client for the url pattern: `https://yourhostnameofstrider/ext/heroku/oauth/callback`
 Once you have your `HEROKU_OAUTH_ID` and `HEROKU_OAUTH_SECRET`, you must configure Strider to use them like this:
+
+## Running Strider locally:
+
+```sh
+SERVER_NAME=<servername via ngrok> PLUGIN_HEROKU_CLIENT_ID=<id> PLUGIN_HEROKU_CLIENT_SECRET=<secret> npm start
+```
+
+## Running Strider on Heroku:
 
 Install the [heroku cli](https://devcenter.heroku.com/articles/heroku-cli), and run:
 
 ```sh
-heroku config:add HEROKU_OAUTH_ID=<id> HEROKU_OAUTH_SECRET=<secret>
+heroku config:add PLUGIN_HEROKU_CLIENT_ID=<id> PLUGIN_HEROKU_CLIENT_SECRET=<secret> --app <appname>
 ```
