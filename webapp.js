@@ -156,26 +156,35 @@ function validateAuth(req, token, refresh, profile, done) {
     }
   }
   api.getApps(profile.id, token, function (err, apps) {
-    if (err)
+    if (err) {
       return done(new Error('failed to retrieve apps list: ' + err.message));
+    }
+
     keypair(profile.email + ' - strider', function (err, priv, pub) {
-      if (err)
+      if (err) {
         return done(new Error('Failed to generate keypair; ' + err.message));
-      api.addKey(token, pub, function (err) {
-        if (err)
+      }
+
+      api
+        .addKey(pub)
+        .then(() => {
+          profile.emails.forEach((item) => {
+            heroku.accounts.push({
+              id: profile.id,
+              token: token,
+              email: item.value,
+              privkey: priv,
+              pubkey: pub,
+              cache: [apps],
+            });
+          });
+          req.user.jobPluginData('heroku', heroku, function (err) {
+            done(err, req.user);
+          });
+        })
+        .catch((err) => {
           return done(new Error('Failed to add ssh key: ' + err.message));
-        heroku.accounts.push({
-          id: profile.id,
-          token: token,
-          email: profile.email,
-          privkey: priv,
-          pubkey: pub,
-          cache: [apps],
         });
-        req.user.jobPluginData('heroku', heroku, function (err) {
-          done(err, req.user);
-        });
-      });
     });
   });
 }

@@ -1,11 +1,47 @@
-<h3>Heroku!</h3>
+<h3>Heroku</h3>
 <div ng-show="userIsCreator">
-  <a
-    ng-hide="userConfig.accounts.length"
-    href="/ext/heroku/oauth?redirect=/[[ project.name ]]/config"
-    class="btn btn-success"
-    >Add a Heroku Account</a
-  >
+  <div ng-hide="userConfig.accounts.length">
+    <p>
+      To get started setup Strider as an Api Client on Heroku. You can do this
+      via the
+      <a
+        href="https://dashboard.heroku.com/account/applications"
+        target="_blank"
+        rel="noopenner noreferrer"
+      >
+        Applications
+      </a>
+      page under Account Settings.
+    </p>
+
+    <p>
+      Once you have the 'Client ID' and 'Client Secret' make sure to set them as
+      environment variables for Strider (you'll have to restart Strider for
+      this). Environment variables should be
+      <code>PLUGIN_HEROKU_CLIENT_ID</code> and
+      <code>PLUGIN_HEROKU_CLIENT_SECRET</code>.
+    </p>
+
+    <p>
+      Next you'll need to install the
+      <a
+        href="https://devcenter.heroku.com/articles/heroku-cli"
+        target="_blank"
+        rel="noopenner noreferrer"
+      >
+        Heroku CLI
+      </a>
+      and run <code>heroku login</code>. Now you are ready to "Add Heroku"
+      below.
+    </p>
+
+    <a
+      href="/ext/heroku/oauth?redirect=/[[ project.name ]]/config"
+      class="btn btn-success"
+      >Add a Heroku Account</a
+    >
+  </div>
+
   <div ng-show="userConfig.accounts.length">
     <div class="accounts">
       <h4>Linked Accounts</h4>

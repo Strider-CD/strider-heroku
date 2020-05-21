@@ -39,11 +39,13 @@
     }
   },
   "dependencies": {
+    "execa": "^4.0.1",
     "passport-heroku": "1.0.0",
     "ssh-keypair": "^2.0.0",
     "step": "^1.0.0",
     "strider-git": "^1.0.3",
-    "superagent": "^5.2.2"
+    "superagent": "^5.2.2",
+    "tmp-promise": "^3.0.2"
   },
   "devDependencies": {
     "eslint": "^7.0.0",

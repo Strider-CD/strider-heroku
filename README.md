@@ -1,8 +1,8 @@
-# Heroku Deploys with strider
+# Heroku Deploys with Strider
 
-There's a lot that needs to be done here. See the [strider-extension-loader
-Readme](https://github.com/Strider-CD/strider-extension-loader/tree/1_4_refactor)
-for info on the api (under "job plugins").
+Prerequisites:
+
+- [heroku cli](https://devcenter.heroku.com/articles/heroku-cli)
 
 # Important config!
 
@@ -17,7 +17,13 @@ This is a screenshot of what you will see on your dashboard:
 If running locally we recommend using ngrok: `ngrok http 3000` and using the provided url as your host in Heroku and for `SERVER_NAME` env on Strider.
 
 Add an API client for the url pattern: `https://yourhostnameofstrider/ext/heroku/oauth/callback`
-Once you have your `HEROKU_OAUTH_ID` and `HEROKU_OAUTH_SECRET`, you must configure Strider to use them like this:
+Copy values for `HEROKU_OAUTH_ID` and `HEROKU_OAUTH_SECRET`, you'll configure Strider to use them later.
+
+Install the [heroku cli](https://devcenter.heroku.com/articles/heroku-cli), and login:
+
+```sh
+heroku login
+```
 
 ## Running Strider locally:
 
